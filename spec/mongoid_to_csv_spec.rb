@@ -25,9 +25,14 @@ describe MongoidToCSV do
     Movie.bad.to_csv.should eq(content_of(fixtures_file('movies_bad.csv')))
   end
 
-  it 'should not include id and timestamp fields' do
+  it 'should not include id and timestamp fields by default' do
     header = Movie.to_csv.lines.first
     header.should_not =~ /^id|created_at|updated_at/
+  end
+
+  it 'should include id and timestamp fields when specified' do
+    header = Movie.to_csv(false).lines.first
+    header.should =~ /^id|created_at|updated_at/
   end
 
   it 'should call to_csv on each attribute if it responds to it' do
